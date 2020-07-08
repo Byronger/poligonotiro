@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,8 +12,10 @@ namespace poligonotiro.Controllers
     public class UsuariosController : Controller
     {
         // GET: Usuarios
-        public ActionResult Index()
+        public ActionResult Index(string message = "")
         {
+            ViewBag.Message = message;
+            
             int varrol = MySession.Current.Rol;
 
             if (varrol == 2)
@@ -166,9 +168,21 @@ namespace poligonotiro.Controllers
         {
             using (Context db = new Context())
             {
-                var oUsuario = db.Usuario.Find(idelimina);
-                db.Usuario.Remove(oUsuario);
-                db.SaveChanges();
+                var oCliente = new cliente();
+                var idusu = db.Cliente.FirstOrDefault(e => e.id_usuario == idelimina);
+
+                if (idusu != null)
+                {
+                    return RedirectToAction("Index", new { message = "No se puede eliminar el usuario debido a que tiene un cliente asociado, Por favor verifique." });
+                }
+                else
+                {
+                    var oUsuario = db.Usuario.Find(idelimina);
+                    db.Usuario.Remove(oUsuario);
+                    db.SaveChanges();
+                }
+
+                
             }
             return Redirect("~/Usuarios/");
         }
