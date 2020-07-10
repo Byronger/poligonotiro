@@ -1,8 +1,9 @@
-﻿@model List<poligonotiro.Models.ViewModels.Listareservaweb>
+@model List<poligonotiro.Models.ViewModels.Listareservaweb>
 
 @{
     ViewBag.Title = "Mis Reservas";
     List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
+
     List<SelectListItem> items1 = (List<SelectListItem>)ViewBag.items1;
 }
 <body style="background: url(/Content/images/pol1.jpg); background-size: cover; background-position: center;">
@@ -17,24 +18,26 @@
             <table class="table table-striped" width="100%" border="3" cellspacing="10" cellpadding="10" style="background: white;">
                 <tr>
                     <th width="5%">No. Reserva</th>
-                    <th width="10%">Fecha</th>
-                    <th width="10%">Hora Inicio</th>
+                    <th width="20%">Usuario</th>
+                    <th width="8%">Fecha</th>
+                    <th width="8%">Hora Inicio</th>
                     <th width="10%">Cantidad minutos</th>
                     <th width="8%">Hora Fin</th>
-                    <th width="5%">Costo</th>
-                    <th width="15%">Línea de Tiro</th>
+                    <th width="10%">Costo</th>
+                    <th width="14%">Línea de Tiro</th>
                     <th width="15%" style="text-align: center;">Acciones</th>
                 </tr>
                 @foreach (var oElemento in Model)
                 {
                     <tr>
                         <td width="5%">@oElemento.Id </td>
-                        <td width="10%">@oElemento.fecha.ToString("dd/MM/yyyy")</td>
-                        <td width="10%">@oElemento.horainicio</td>
+                        <td width="20%">@oElemento.nombreusuario</td>
+                        <td width="8%">@oElemento.fecha.ToString("dd/MM/yyyy")</td>
+                        <td width="8%">@oElemento.horainicio</td>
                         <td width="10%">@oElemento.cantidadminutos</td>
                         <td width="8%">@oElemento.horafin</td>
-                        <td width="5%">@oElemento.costo</td>
-                        <td width="15%">@oElemento.idlineatiro</td>
+                        <td width="10%">@oElemento.costo</td>
+                        <td width="14%">@oElemento.nombrelinea</td>
                         <td width="15%" align="center">
                             <a href="" data-toggle="modal" data-target="#editarreserva" class="btn btn-warning" onclick="editarreserva('@oElemento.Id','@oElemento.idusuario','@oElemento.fecha.ToString("dd/MM/yyyy")','@oElemento.horainicio','@oElemento.cantidadminutos','@oElemento.horafin','@oElemento.costo','@oElemento.idlineatiro','@oElemento.costopack')">Editar</a>
                             <a href="" data-toggle="modal" data-target="#eliminarreserva" class="btn btn-danger" onclick="eliminarreserva('@oElemento.Id')">Eliminar</a>
@@ -47,7 +50,7 @@
     </div>
 
     <script type="text/javascript">
-        function editarreserva(id, usuario, fecha, horainicio, cantidadminutos, horafin, costo, idlineatiro,costopack) {
+        function editarreserva(id, usuario, fecha, horainicio, cantidadminutos, horafin, costo, idlineatiro, costopack) {
             $('#idactualiza').val(id);
             $('#idusuario').val(usuario);
             $('#fecha').val(fecha);
@@ -57,6 +60,13 @@
             $('#costoid').val(costo);
             $('#idlineatiroact').val(idlineatiro);
             $('#costopack').val(costopack);
+
+            var horasiniciales = horainicio.substring(0, 2);
+            var minutosiniciales = horainicio.substring(3, 5);
+
+            $('#sumahorasiact').val(horasiniciales);
+            $('#sumaminutosiact').val(minutosiniciales);
+
         };
 
         function eliminarreserva(id) {
@@ -67,12 +77,273 @@
             var costopack = document.getElementById("costopa").value
             costopack = parseFloat(costopack);
             document.getElementById("costoadd").value = costopack
-            document.getElementById("horafinadd").value = "00" + ":" + "00";
+            document.getElementById("horafinadd").value = "01" + ":" + "00";
+
+            document.getElementById("horainicioadd").value = "01" + ":" + "00";
+
+            //alert(costopack);
         }
+
+        var horai = 1;
+        var minutosi = 0;
+
+        function sumahora() {
+            if (horai > 22) {
+                horai = 1;
+            } else {
+                horai += 1;
+            }
+
+            document.getElementById("sumahorasi").value = horai
+
+            var horai1;
+
+            if (horai < 10) {
+                horai1 = "0" + horai;
+            } else {
+                horai1 = horai;
+            }
+
+            document.getElementById("horainicioadd").value = horai1 + ":" + "00";
+
+            document.getElementById("horafinadd").value = horai1 + ":" + "15";
+
+        }
+
+        function restahora() {
+            if (horai < 2) {
+                horai = 23;
+            } else {
+                horai -= 1;
+            }
+
+            document.getElementById("sumahorasi").value = horai
+
+            var horai1;
+
+            if (horai < 10) {
+                horai1 = "0" + horai;
+            } else {
+                horai1 = horai;
+            }
+
+            document.getElementById("horainicioadd").value = horai1 + ":" + "00";
+
+            document.getElementById("horafinadd").value = horai1 + ":" + "15";
+        }
+
+        function sumaminutos() {
+
+            if (minutosi > 43) {
+                minutosi = "0" + 0;
+            } else {
+
+                if (minutosi < 2) {
+                    minutosi = 0;
+                }
+
+
+                minutosi += 15;
+            }
+
+
+            document.getElementById("sumaminutosi").value = minutosi
+
+            var horaactini;
+            var horaactfin;
+
+            horaactini = document.getElementById("horainicioadd").value.substring(0, 2);
+            horaactfin = 15 + minutosi;
+
+            if (minutosi == 00) {
+                horaactfin = "15";
+            }
+
+            if (horaactfin > 59) {
+                horaactfin = "00";
+            }
+
+            document.getElementById("horainicioadd").value = horaactini + ":" + minutosi;
+
+            document.getElementById("horafinadd").value = horaactini + ":" + horaactfin;
+        }
+
+        function restaminutos() {
+            if (minutosi < 2) {
+                minutosi = 45;
+            } else {
+                minutosi -= 15;
+
+                if (minutosi == 0) {
+                    minutosi = "0" + 0;
+                }
+            }
+
+            document.getElementById("sumaminutosi").value = minutosi
+
+
+
+            var horaactini;
+            var horaactfin;
+
+            horaactini = document.getElementById("horainicioadd").value.substring(0, 2);
+            horaactfin = 15 + minutosi;
+
+            if (minutosi == 00) {
+                horaactfin = "15";
+            }
+
+            if (horaactfin > 59) {
+                horaactfin = "00";
+            }
+
+
+
+            document.getElementById("horainicioadd").value = horaactini + ":" + minutosi;
+
+            document.getElementById("horafinadd").value = horaactini + ":" + horaactfin;
+        }
+
+
+
+        //CALCULO ACTUALIZAR ----------------------------------------------------------------
+
+
+        function sumahoraact() {
+            var horai = parseInt(document.getElementById("sumahorasiact").value);
+            var mins = parseInt(document.getElementById("sumaminutosiact").value);
+
+
+            if (horai > 22) {
+                horai = 1;
+            } else {
+                horai += 1;
+            }
+
+            document.getElementById("sumahorasiact").value = horai
+
+            var horai1;
+
+            if (horai < 10) {
+                horai1 = "0" + horai;
+            } else {
+                horai1 = horai;
+            }
+
+            document.getElementById("horainicio").value = horai1 + ":" + mins;
+
+            document.getElementById("horafin").value = horai1 + ":" + "15";
+
+        }
+
+        function restahoraact() {
+            var horai = parseInt(document.getElementById("sumahorasiact").value);
+            var mins = parseInt(document.getElementById("sumaminutosiact").value);
+
+            if (horai < 2) {
+                horai = 23;
+            } else {
+                horai -= 1;
+            }
+
+            document.getElementById("sumahorasiact").value = horai
+
+            var horai1;
+
+            if (horai < 10) {
+                horai1 = "0" + horai;
+            } else {
+                horai1 = horai;
+            }
+
+            document.getElementById("horainicio").value = horai1 + ":" + mins;
+
+            document.getElementById("horafin").value = horai1 + ":" + "15";
+        }
+
+        function sumaminutosact() {
+
+            var minutosi = parseInt(document.getElementById("sumaminutosiact").value);
+
+            if (minutosi > 43) {
+                minutosi = "0" + 0;
+            } else {
+
+                if (minutosi < 2) {
+                    minutosi = 0;
+                }
+
+
+                minutosi += 15;
+            }
+
+
+            document.getElementById("sumaminutosiact").value = minutosi
+
+            var horaactini;
+            var horaactfin;
+
+            horaactini = document.getElementById("horainicio").value.substring(0, 2);
+            horaactfin = 15 + minutosi;
+
+            if (minutosi == 00) {
+                horaactfin = "15";
+            }
+
+            if (horaactfin > 59) {
+                horaactfin = "00";
+            }
+
+            document.getElementById("horainicio").value = horaactini + ":" + minutosi;
+
+            document.getElementById("horafin").value = horaactini + ":" + horaactfin;
+        }
+
+        function restaminutosact() {
+            var minutosi = parseInt(document.getElementById("sumaminutosiact").value);
+
+            if (minutosi < 2) {
+                minutosi = 45;
+            } else {
+                minutosi -= 15;
+
+                if (minutosi == 0) {
+                    minutosi = "0" + 0;
+                }
+            }
+
+            document.getElementById("sumaminutosiact").value = minutosi
+
+
+
+            var horaactini;
+            var horaactfin;
+
+            horaactini = document.getElementById("horainicio").value.substring(0, 2);
+            horaactfin = 15 + minutosi;
+
+            if (minutosi == 00) {
+                horaactfin = "15";
+            }
+
+            if (horaactfin > 59) {
+                horaactfin = "00";
+            }
+
+
+
+            document.getElementById("horainicio").value = horaactini + ":" + minutosi;
+
+            document.getElementById("horafin").value = horaactini + ":" + horaactfin;
+        }
+
+
+
+
 
         //MODAL DE AGREGAR ----------------------------------------------------------------
 
-        function total12() {
+        function total1() {
             var horaini = document.getElementById("horainicioadd").value
 
             var suma = parseInt(horaini.substring(3, 5)) + 15;
@@ -93,7 +364,7 @@
 
             var costopack = document.getElementById("costopa").value
             costopack = parseFloat(costopack);
-            document.getElementById("costoadd").value = costopack 
+            document.getElementById("costoadd").value = costopack
 
         }
 
@@ -102,6 +373,7 @@
         var cant = 15;
 
         function suma() {
+
             cant += 15;
             document.getElementById("cantidadminutosadd").value = cant
             //total()
@@ -116,6 +388,7 @@
             document.getElementById("costoadd").value = costopack;
 
             //----------------------------------------------------------------------
+
 
             inicio = document.getElementById("horainicioadd").value;
             fin = document.getElementById("horafinadd").value;
@@ -293,6 +566,8 @@
 
             document.getElementById("horafinadd").value = horas + ":" + minutos;
         }
+
+        //------------------------------------------------------------RESTA
 
         function resta() {
             if (cant < 16) {
@@ -497,9 +772,6 @@
             document.getElementById("horafinadd").value = horas + ":" + minutos;
         }
 
-        function total() {
-            document.getElementById("costoadd").value = cant * 5
-        }
 
 
         //MODAL DE EDITAR ----------------------------------------------------------------
@@ -527,13 +799,9 @@
 
 
 
-        var cant = 15;
+
 
         function sumaedit() {
-            /*cant += 15;
-            document.getElementById("cantidadminutos").value = cant
-            total1()*/
-
             var cant = parseFloat(document.getElementById("cantidadminutos").value);
 
             document.getElementById("cantidadminutos").value = cant + 15;
@@ -550,8 +818,6 @@
             //----------------------------------------------------------------------
 
 
-
-
             inicio = document.getElementById("horainicio").value;
             fin = document.getElementById("horafin").value;
 
@@ -559,18 +825,19 @@
             iniciominutos = parseInt(inicio.substring(3, 5));
 
             finhoras = parseInt(fin.substring(0, 2));
-            finminutos = parseInt(fin.substring(3, 2));
+            finminutos = parseInt(fin.substring(3, 5));
 
 
 
             transcurridohoras = iniciohoras;
             transcurridominutos = cant;
-            //alert(transcurridominutos);
 
             if (iniciominutos > 0) {
                 transcurridominutos = cant + iniciominutos;
+                //alert('if');
             } else {
                 transcurridominutos = cant;
+                //alert('else');
             }
 
 
@@ -730,13 +997,6 @@
         }
 
         function restaedit() {
-            /*if (cant < 16) {
-
-            } else {
-                cant -= 15;
-            }
-            document.getElementById("cantidadminutos").value = cant
-            total1()*/
 
             var cant = parseFloat(document.getElementById("cantidadminutos").value);
 
@@ -745,6 +1005,8 @@
             } else {
                 document.getElementById("cantidadminutos").value = cant - 15;
             }
+
+            //total11()
 
             //----------------------------------------------------------------------
 
@@ -769,7 +1031,7 @@
             iniciominutos = parseInt(inicio.substring(3, 5));
 
             finhoras = parseInt(fin.substring(0, 2));
-            finminutos = parseInt(fin.substring(3, 2));
+            finminutos = parseInt(fin.substring(3, 5));
 
 
 
@@ -940,11 +1202,15 @@
         }
 
         function total() {
-            document.getElementById("costoadd").value = cant * 5
+            var costopack = document.getElementById("costopa").value
+            costopack = parseFloat(costopack);
+            document.getElementById("costoadd").value = cant * costopack
         }
 
-        function total1() {
-            document.getElementById("costoid").value = cant * 5
+        function total11() {
+            var costopack = document.getElementById("costopack").value
+            costopack = parseFloat(costopack);
+            document.getElementById("costoid").value = cant * costopack
         }
     </script>
 
@@ -973,10 +1239,68 @@
                                 <br />
                                 <div class="col col-md-12">
                                     <label for="my-input">Hora Inicio:</label>
-                                    <input type="time" onkeydown="total12()" onkeyup="total12()" name="horainicio" id="horainicioadd" class="form-control" placeholder="Hora de Inicio" required="">
+
+                                    <div class="row">
+                                        <div class="col col-md-3"></div>
+                                        <div class=" col col-md-2">
+                                            <div class="row">
+                                                <label for="my-input">Hora</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-2">   </div>
+
+                                        <div class=" col col-md-2">
+                                            <div class="row">
+                                                <label for="my-input">Minutos</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-3"></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col col-md-3"></div>
+                                        <div class=" col col-md-2">
+                                            <input readonly type="text" name="sumahorasi" id="sumahorasi" class="form-control" value="1" required="">
+                                        </div>
+                                        <div class="col col-md-2"> - </div>
+
+                                        <div class=" col col-md-2">
+                                            <input readonly type="text" name="sumaminutosi" id="sumaminutosi" value="00" class="form-control" required="">
+                                        </div>
+
+                                        <div class="col col-md-3"></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col col-md-3"></div>
+                                        <div class=" col col-md-2">
+                                            <div class="row">
+                                                <button onclick="sumahora()" class="btn btn-primary" type="button">+</button>
+                                                <button onclick="restahora()" class="btn btn-primary" type="button">-</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-2">   </div>
+
+                                        <div class=" col col-md-2">
+                                            <div class="row">
+                                                <button onclick="sumaminutos()" class="btn btn-primary" type="button">+</button>
+                                                <button onclick="restaminutos()" class="btn btn-primary" type="button">-</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-3"></div>
+                                    </div>
+
+
+
+                                    <input type="hidden" onkeydown="total1()" onkeyup="total1()" name="horainicio" id="horainicioadd" class="form-control" placeholder="Hora de Inicio" required="">
                                 </div>
-                                <br /><br /><br />
-                                <br />
+                                <br /><br /><br /><br /><br /><br /><br /><br />
+
+
                                 <div class="col col-md-12">
 
                                     <label for="my-input">Cantidad de Minutos:</label>
@@ -995,15 +1319,17 @@
                                 <br /><br /><br /><br />
                                 <div class="col col-md-12">
                                     <label for="my-input">Costo:</label>
-                                    <input type="decimal" name="costo" id="costoadd" class="form-control" placeholder="Costo" readonly required="">
+                                    <input type="number" name="costo" id="costoadd" class="form-control" placeholder="Costo" readonly required="">
                                 </div>
                                 <br /><br /><br /><br />
                                 <div class="col col-md-12">
                                     <label for="my-input">Linea de Tiro:</label>
                                     @Html.DropDownList("idlineatiro", items, new { @class = "form-control", @required = "required" })
 
-                                    
+
                                     @Html.DropDownList("costopa", items1, new { @class = "form-control", @required = "required", style = "display: none;" })
+
+
                                 </div>
                             </center>
                         </div>
@@ -1053,12 +1379,71 @@
                                 </div>
                                 <br /><br /><br />
                                 <br />
+
                                 <div class="col col-md-12">
                                     <label for="my-input">Hora Inicio:</label>
-                                    <input type="time" onkeydown="total1edit()" onkeyup="total1edit()" name="horainicio" id="horainicio" class="form-control" placeholder="Hora de Inicio" required="">
+
+                                    <div class="row">
+                                        <div class="col col-md-3"></div>
+                                        <div class=" col col-md-2">
+                                            <div class="row">
+                                                <label for="my-input">Hora</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-2">   </div>
+
+                                        <div class=" col col-md-2">
+                                            <div class="row">
+                                                <label for="my-input">Minutos</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-3"></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col col-md-3"></div>
+                                        <div class=" col col-md-2">
+                                            <input readonly type="text" name="sumahorasi" id="sumahorasiact" class="form-control" value="1" required="">
+                                        </div>
+                                        <div class="col col-md-2"> - </div>
+
+                                        <div class=" col col-md-2">
+                                            <input readonly type="text" name="sumaminutosi" id="sumaminutosiact" value="00" class="form-control" required="">
+                                        </div>
+
+                                        <div class="col col-md-3"></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col col-md-3"></div>
+                                        <div class=" col col-md-2">
+                                            <div class="row">
+                                                <button onclick="sumahoraact()" class="btn btn-primary" type="button">+</button>
+                                                <button onclick="restahoraact()" class="btn btn-primary" type="button">-</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-2">   </div>
+
+                                        <div class=" col col-md-2">
+                                            <div class="row">
+                                                <button onclick="sumaminutosact()" class="btn btn-primary" type="button">+</button>
+                                                <button onclick="restaminutosact()" class="btn btn-primary" type="button">-</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col col-md-3"></div>
+                                    </div>
+
+
+
+                                    <input type="hidden" onkeydown="total1edit()" onkeyup="total1edit()" name="horainicio" id="horainicio" class="form-control" placeholder="Hora de Inicio" required="">
                                 </div>
-                                <br /><br /><br />
-                                <br />
+
+                                <br /><br /><br /><br /><br /><br /><br />
+
                                 <div class="col col-md-12">
 
                                     <label for="my-input">Cantidad de Minutos:</label>
@@ -1077,12 +1462,13 @@
                                 <br /><br /><br /><br />
                                 <div class="col col-md-12">
                                     <label for="my-input">Costo:</label>
-                                    <input type="decimal" name="costo" id="costoid" class="form-control" placeholder="Costo" readonly required="">
+                                    <input type="number" name="costo" id="costoid" class="form-control" placeholder="Costo" readonly required="">
                                 </div>
                                 <br /><br /><br /><br />
                                 <div class="col col-md-12">
                                     <label for="my-input">Linea de Tiro:</label>
                                     @Html.DropDownList("idlineatiroact", items, new { @class = "form-control", @required = "required" });
+
                                     <input type="hidden" name="costopack" id="costopack" class="form-control" placeholder="Costo" readonly>
                                 </div>
                             </center>
