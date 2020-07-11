@@ -213,7 +213,10 @@
             var horai = parseInt(document.getElementById("sumahorasiact").value);
             var mins = parseInt(document.getElementById("sumaminutosiact").value);
             
-
+            document.getElementById("cantidadminutos").value = 15;
+            
+            document.getElementById("costoid").value = document.getElementById("costopack").value;
+            
             if (horai > 22) {
                 horai = 1;
             } else {
@@ -239,6 +242,10 @@
         function restahoraact() {
             var horai = parseInt(document.getElementById("sumahorasiact").value);
             var mins = parseInt(document.getElementById("sumaminutosiact").value);
+
+            document.getElementById("cantidadminutos").value = 15;
+
+            document.getElementById("costoid").value = document.getElementById("costopack").value;
             
             if (horai < 2) {
                 horai = 23;
@@ -264,6 +271,10 @@
         function sumaminutosact() {
             
             var minutosi = parseInt(document.getElementById("sumaminutosiact").value);
+
+            document.getElementById("cantidadminutos").value = 15;
+
+            document.getElementById("costoid").value = document.getElementById("costopack").value;
 
             if (minutosi > 43) {
                 minutosi = "0" + 0;
@@ -301,6 +312,10 @@
 
         function restaminutosact() {
             var minutosi = parseInt(document.getElementById("sumaminutosiact").value);
+
+            document.getElementById("cantidadminutos").value = 15;
+
+            document.getElementById("costoid").value = document.getElementById("costopack").value;
 
             if (minutosi < 2) {
                 minutosi = 45;
@@ -805,9 +820,8 @@
             var cant = parseFloat(document.getElementById("cantidadminutos").value);
 
             document.getElementById("cantidadminutos").value = cant + 15;
-            //total11()
 
-            //----------------------------------------------------------------------
+            //COSTO----------------------------------------------------------------------
 
             var costopack = parseFloat(document.getElementById("costoid").value);
 
@@ -822,164 +836,19 @@
             fin = document.getElementById("horafin").value;
 
             iniciohoras = parseInt(inicio.substring(0, 2));
-            iniciominutos = parseInt(inicio.substring(3, 5));
-
             finhoras = parseInt(fin.substring(0, 2));
+
+            iniciominutos = parseInt(inicio.substring(3, 5));
             finminutos = parseInt(fin.substring(3, 5));
 
 
+            transcurridohoras = finhoras;
+            transcurridominutos = finminutos + 15;
 
-            transcurridohoras = iniciohoras;
-            transcurridominutos = cant;
-
-            if (iniciominutos > 0) {
-                transcurridominutos = cant + iniciominutos;
-                //alert('if');
-            } else {
-                transcurridominutos = cant;
-                //alert('else');
+            if (transcurridominutos > 59) {
+                transcurridominutos = "00";
+                transcurridohoras = finhoras + 1;
             }
-
-
-            if (transcurridominutos > 59 && transcurridominutos < 120) {
-                transcurridohoras += 1;
-
-                if (transcurridominutos > 74 && transcurridominutos < 90) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 89 && transcurridominutos < 105) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 104 && transcurridominutos < 120) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 0 && cant > 59 && cant < 120) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-
-
-
-            } else if (transcurridominutos > 119 && transcurridominutos < 180) {
-                transcurridohoras += 2;
-
-                if (transcurridominutos > 134 && transcurridominutos < 150) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 149 && transcurridominutos < 165) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 164 && transcurridominutos < 180) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 0 && cant > 119 && cant < 180) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-
-            } else if (transcurridominutos > 179 && transcurridominutos < 240) {
-                transcurridohoras += 3;
-
-                if (transcurridominutos > 194 && transcurridominutos < 210) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 209 && transcurridominutos < 225) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 224 && transcurridominutos < 239) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 0 && cant > 179 && cant < 240) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-
-            } else if (transcurridominutos > 239 && transcurridominutos < 300) {
-                transcurridohoras += 4;
-
-                if (transcurridominutos > 254 && transcurridominutos < 270) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 269 && transcurridominutos < 285) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 284 && transcurridominutos < 300) {
-                    transcurridominutos = "45";
-                } else {
-                    transcurridominutos = "00";
-                }
-            } else if (transcurridominutos > 299 && transcurridominutos < 360) {
-                transcurridohoras += 5;
-
-                if (transcurridominutos > 314 && transcurridominutos < 330) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 329 && transcurridominutos < 345) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 344 && transcurridominutos < 360) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 0 && cant > 239 && cant < 300) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-            } else if (transcurridominutos > 359 && transcurridominutos < 420) {
-                transcurridohoras += 6;
-
-                if (transcurridominutos > 374 && transcurridominutos < 390) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 389 && transcurridominutos < 405) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 404 && transcurridominutos < 420) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 359 && cant > 59 && cant < 420) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-            } else if (transcurridominutos > 419 && transcurridominutos < 480) {
-                transcurridohoras += 7;
-
-                if (transcurridominutos > 434 && transcurridominutos < 450) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 449 && transcurridominutos < 465) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 464 && transcurridominutos < 480) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 419 && cant > 59 && cant < 480) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-            } else if (transcurridominutos > 479 && transcurridominutos < 540) {
-                transcurridohoras += 8;
-
-                if (transcurridominutos > 494 && transcurridominutos < 510) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 509 && transcurridominutos < 525) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 524 && transcurridominutos < 540) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 479 && cant > 59 && cant < 540) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-            }
-
 
 
             horas = transcurridohoras.toString();
@@ -996,6 +865,9 @@
             document.getElementById("horafin").value = horas + ":" + minutos;
         }
 
+
+
+
         function restaedit() {
 
             var cant = parseFloat(document.getElementById("cantidadminutos").value);
@@ -1006,9 +878,8 @@
                 document.getElementById("cantidadminutos").value = cant - 15;
             }
 
-            //total11()
 
-            //----------------------------------------------------------------------
+            //COSTO----------------------------------------------------------------------
 
             var costopack = parseFloat(document.getElementById("costoid").value);
             var valor = parseFloat(document.getElementById("costopack").value);
@@ -1024,167 +895,30 @@
             //----------------------------------------------------------------------
 
 
+
             inicio = document.getElementById("horainicio").value;
             fin = document.getElementById("horafin").value;
 
             iniciohoras = parseInt(inicio.substring(0, 2));
-            iniciominutos = parseInt(inicio.substring(3, 5));
-
             finhoras = parseInt(fin.substring(0, 2));
+
+            iniciominutos = parseInt(inicio.substring(3, 5));
             finminutos = parseInt(fin.substring(3, 5));
 
 
-
-            transcurridohoras = iniciohoras;
-            transcurridominutos = cant;
-            //alert(transcurridominutos);
-
-            if (iniciominutos > 0) {
-                transcurridominutos = cant + iniciominutos;
+            if (cant < 16) {
+                
             } else {
-                transcurridominutos = cant;
-            }
+                transcurridohoras = finhoras;
+                transcurridominutos = finminutos - 15;
 
-
-            if (transcurridominutos > 59 && transcurridominutos < 120) {
-                transcurridohoras += 1;
-
-                if (transcurridominutos > 74 && transcurridominutos < 90) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 89 && transcurridominutos < 105) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 104 && transcurridominutos < 120) {
+                if (transcurridominutos < 0) {
                     transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 0 && cant > 59 && cant < 120) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-
-
-
-            } else if (transcurridominutos > 119 && transcurridominutos < 180) {
-                transcurridohoras += 2;
-
-                if (transcurridominutos > 134 && transcurridominutos < 150) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 149 && transcurridominutos < 165) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 164 && transcurridominutos < 180) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 0 && cant > 119 && cant < 180) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-
-            } else if (transcurridominutos > 179 && transcurridominutos < 240) {
-                transcurridohoras += 3;
-
-                if (transcurridominutos > 194 && transcurridominutos < 210) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 209 && transcurridominutos < 225) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 224 && transcurridominutos < 239) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 0 && cant > 179 && cant < 240) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-
-            } else if (transcurridominutos > 239 && transcurridominutos < 300) {
-                transcurridohoras += 4;
-
-                if (transcurridominutos > 254 && transcurridominutos < 270) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 269 && transcurridominutos < 285) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 284 && transcurridominutos < 300) {
-                    transcurridominutos = "45";
-                } else {
-                    transcurridominutos = "00";
-                }
-            } else if (transcurridominutos > 299 && transcurridominutos < 360) {
-                transcurridohoras += 5;
-
-                if (transcurridominutos > 314 && transcurridominutos < 330) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 329 && transcurridominutos < 345) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 344 && transcurridominutos < 360) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 0 && cant > 239 && cant < 300) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-            } else if (transcurridominutos > 359 && transcurridominutos < 420) {
-                transcurridohoras += 6;
-
-                if (transcurridominutos > 374 && transcurridominutos < 390) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 389 && transcurridominutos < 405) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 404 && transcurridominutos < 420) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 359 && cant > 59 && cant < 420) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-            } else if (transcurridominutos > 419 && transcurridominutos < 480) {
-                transcurridohoras += 7;
-
-                if (transcurridominutos > 434 && transcurridominutos < 450) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 449 && transcurridominutos < 465) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 464 && transcurridominutos < 480) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 419 && cant > 59 && cant < 480) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
-                }
-            } else if (transcurridominutos > 479 && transcurridominutos < 540) {
-                transcurridohoras += 8;
-
-                if (transcurridominutos > 494 && transcurridominutos < 510) {
-                    transcurridominutos = "15";
-                } else if (transcurridominutos > 509 && transcurridominutos < 525) {
-                    transcurridominutos = "30";
-                }
-                else if (transcurridominutos > 524 && transcurridominutos < 540) {
-                    transcurridominutos = "45";
-                } else {
-                    if (iniciominutos > 479 && cant > 59 && cant < 540) {
-                        transcurridominutos = 0 + iniciominutos;
-                    } else {
-                        transcurridominutos = "00";
-                    }
+                    transcurridohoras = finhoras - 1;
                 }
             }
-
+            
+            
 
 
             horas = transcurridohoras.toString();
@@ -1467,7 +1201,7 @@
                                 <br /><br /><br /><br />
                                 <div class="col col-md-12">
                                     <label for="my-input">Linea de Tiro:</label>
-                                    @Html.DropDownList("idlineatiroact", items, new { @class = "form-control", @required = "required" });
+                                    @Html.DropDownList("idlineatiroact", items, new { @class = "form-control", @required = "required" })
 
                                     <input type="hidden" name="costopack" id="costopack" class="form-control" placeholder="Costo" readonly>
                                 </div>
